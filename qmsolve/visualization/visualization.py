@@ -1,102 +1,103 @@
-from abc import abstractmethod 
+import numpy as np
+from mayavi import mlab
+from abc import ABC, abstractmethod  # Ensures ABC is imported
+from ..util.colour_functions import complex_to_rgb
+from ..util.constants import *
 
-# For type hinting purposes
-from typing import Union, Dict, List
-
-
-class Visualization:
+# 🔹 Define the Visualization base class
+class Visualization(ABC):
     @abstractmethod
-    def __init__(self,eigenstates):
+    def __init__(self, eigenstates):
         pass
 
     @abstractmethod
-    def plot_eigenstate(self):
+    def plot_eigenstate(self, k, contrast_vals):
         pass
 
     @abstractmethod
+    def animate(self, contrast_vals):
+        pass
+
+    @abstractmethod
+    def superpositions(self, states, contrast_vals, **kw):
+        pass
+
+
+class VisualizationSingleParticle3D(Visualization):
+    def __init__(self, eigenstates):
+        self.eigenstates = eigenstates
+        self.plot_type = 'volume'
+        self.scene = None  # 🔹 Expose scene attribute for external control
+
     def slider_plot(self):
-        pass
-        
-    @abstractmethod
-    def animate_eigenstates(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
-    def superpositions(self, states: Union[int, List[int], Dict[int, complex]],
-                       **kw):
-        """
-        states - specify which eigenstates to superimpose on each other.
-        If it's a single number then superimpose eigenstates 0 to states-1.
-        kw - additional parameters to pass to the function.
-        """
-        pass
+    def plot_eigenstate(self, k, contrast_vals=[0.1, 0.25]):
+        eigenstates = self.eigenstates.array
+        mlab.figure(1, bgcolor=(0, 0, 0), size=(700, 700))
+        psi = eigenstates[k]
+
+        if self.plot_type == 'volume':
+            abs_max = np.amax(np.abs(eigenstates))
+            psi = psi / abs_max
+
+            L = self.eigenstates.extent / 2 / Å
+            N = self.eigenstates.N
+
+            vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(psi))
+
+            mlab.outline()
+            mlab.axes(xlabel='x [Å]', ylabel='y [Å]', zlabel='z [Å]', nb_labels=6, ranges=(-L, L, -L, L, -L, L))
+            φ = 30
+            mlab.view(azimuth=φ, distance=N * 3.5)
+
+            # 🔹 Store the Mayavi scene for external access
+            self.scene = mlab.gcf().scene
+
+            mlab.show()
+
+    def animate(self, contrast_vals=[0.1, 0.25]):
+        eigenstates = self.eigenstates.array
+        mlab.figure(1, bgcolor=(0, 0, 0), size=(700, 700))
+
+        if self.plot_type == 'volume':
+            psi = eigenstates[0]
+            abs_max = np.amax(np.abs(eigenstates))
+            psi = psi / abs_max
+
+            L = self.eigenstates.extent / 2 / Å
+            N = self.eigenstates.N
+            field = mlab.pipeline.scalar_field(psi)
+            vol = mlab.pipeline.volume(field)
+
+            mlab.outline()
+            mlab.axes(xlabel='x [Å]', ylabel='y [Å]', zlabel='z [Å]', nb_labels=6, ranges=(-L, L, -L, L, -L, L))
+            φ = 30
+            mlab.view(azimuth=φ, distance=N * 3.5)
+
+            # 🔹 Store the Mayavi scene for external access
+            self.scene = mlab.gcf().scene
+
+            @mlab.animate(delay=10)
+            def animation():
+                data = {'t': 0.0}
+                while True:
+                    data['t'] += 0.05
+                    yield
+
+            animation()
+            mlab.show()
+
+    def superpositions(self, states, contrast_vals=[0.1, 0.25], **kw):
+        raise NotImplementedError
 
 
-class TimeVisualization:
-    @abstractmethod
-    def __init__(self,simulation):
-        pass
-
-    @abstractmethod
-    def plot(self):
-        pass
-
-    @abstractmethod
-    def animate(self):
-        pass
-
-
-
-from .single_particle_1D import VisualizationSingleParticle1D
-from .single_particle_2D import VisualizationSingleParticle2D
-from .two_identical_particles_1D import VisualizationIdenticalParticles1D
-from ..eigenstates import Eigenstates
-
-
-def init_eigenstate_visualization(eigenstates):
-
-    if eigenstates.type == "SingleParticle1D":
-        return VisualizationSingleParticle1D(eigenstates) 
-
-    elif eigenstates.type == "SingleParticle2D":
-        return VisualizationSingleParticle2D(eigenstates) 
-
-    elif eigenstates.type == "SingleParticle3D":
-        from .single_particle_3D import VisualizationSingleParticle3D
+# 🔹 Restore `init_visualization()`
+def init_visualization(eigenstates):
+    """
+    Initializes the correct visualization class based on the eigenstate type.
+    """
+    if eigenstates.type == "SingleParticle3D":
         return VisualizationSingleParticle3D(eigenstates)
-
-    elif eigenstates.type == "TwoIdenticalParticles1D":
-        return VisualizationIdenticalParticles1D(eigenstates)
-
-from .single_particle_1D import TimeVisualizationSingleParticle1D
-from .single_particle_2D import TimeVisualizationSingleParticle2D
-from .two_identical_particles_1D import TimeVisualizationTwoIdenticalParticles1D
-from ..particle_system import SingleParticle, TwoParticles
-from ..time_dependent_solver import TimeSimulation
-
-def init_timesimulation_visualization(simulation):
-
-    if (isinstance(simulation.H.particle_system ,SingleParticle) and (simulation.H.spatial_ndim == 1)):
-        return TimeVisualizationSingleParticle1D(simulation) 
-
-    elif (isinstance(simulation.H.particle_system , SingleParticle) and (simulation.H.spatial_ndim == 2)):
-        return TimeVisualizationSingleParticle2D(simulation) 
-
-    elif (isinstance(simulation.H.particle_system , SingleParticle) and (simulation.H.spatial_ndim == 3)):
-        raise NotImplementedError()
-        #from .single_particle_3D import TimeVisualizationSingleParticle3D
-        #return TimeVisualizationSingleParticle3D(simulation)
-
-    elif isinstance(simulation.H.particle_system , TwoParticles):
-        return TimeVisualizationTwoIdenticalParticles1D(simulation)
-
-
-def init_visualization(argument):
-
-    if isinstance(argument, Eigenstates):
-        eigenstates = argument
-        return init_eigenstate_visualization(eigenstates)
-
-    elif isinstance(argument, TimeSimulation):
-        simulation = argument
-        return init_timesimulation_visualization(simulation)
+    
+    raise NotImplementedError("Visualization for this type is not implemented.")

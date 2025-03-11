@@ -147,7 +147,7 @@ class Hamiltonian:
                     f"{lobpcg_args['preconditioner']} preconditioner has not been implemented. Use one of {implemented_lobpcg_preconditioners}")
 
 
-            sol = lobpcg(H, eigenvectors_guess, largest=False, M=M, tol=1e-15, maxiter = lobpcg_args['maxiter'])
+            sol = lobpcg(H, eigenvectors_guess, largest=False, M=M, tol=1e-10, maxiter = lobpcg_args['maxiter'])
             eigenvalues, eigenvectors = sol[0], sol[1]
 
             if verbose == True:
@@ -209,7 +209,7 @@ class Hamiltonian:
                     f"{lobpcg_args['preconditioner']} preconditioner has not been implemented. Use one of {implemented_lobpcg_preconditioners}")
 
             import cupy as cp
-            sol = lobpcg(H, cp.array(eigenvectors_guess), largest=False, M=M, tol=1e-15, maxiter = lobpcg_args['maxiter'])
+            sol = lobpcg(H, cp.array(eigenvectors_guess), largest=False, M=M, tol=1e-10, maxiter = lobpcg_args['maxiter'])
             eigenvalues, eigenvectors = sol[0].get(), sol[1].get()
 
 
