@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse import diags, identity
 from scipy.sparse.linalg import spsolve
+from scipy.sparse import csr_matrix
 
 
 class CrankNicolson:
@@ -34,7 +35,7 @@ class CrankNicolson:
         factor = -0.5j * dt
 
         # Ensure the matrices are properly formatted for diagonal storage
-        H_csr = H_matrix.tocsr()
+        H_csr = csr_matrix(H_matrix)  # Ensure H_matrix is in the correct format
         A = I - factor * H_csr
         B = I + factor * H_csr
 

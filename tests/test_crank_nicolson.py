@@ -39,7 +39,11 @@ def mock_simulation(mock_hamiltonian):
         def __init__(self):
             self.H = mock_hamiltonian
             self.store_steps = 1
-            self.Ψ = np.ones(10, dtype=np.complex128)
+            self.Ψ = None
+
+        def store_wavefunction(self, wavefunction):
+            """Mock method to store wavefunction snapshots."""
+            self.Ψ = wavefunction  # Simulate storing the wavefunction
 
     return MockSimulation()
 
