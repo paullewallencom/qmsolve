@@ -1,64 +1,71 @@
-"""
-Single particle quantum mechanics simulation
-using the split-operator method.
-
-References:
-https://www.algorithm-archive.org/contents/
-split-operator_method/split-operator_method.html
-
-https://en.wikipedia.org/wiki/Split-step_method
-
-"""
 import numpy as np
-from ..util.constants import hbar, Å, femtoseconds
-from ..hamiltonian import Hamiltonian
-import time
-import matplotlib.pyplot as plt
-from ..util.colour_functions import complex_to_rgba
+from .split_step import SplitStep
+from .crank_nicolson import CrankNicolson
 
-from .split_step import SplitStep, SplitStepCupy
-from .crank_nicolson import CrankNicolson, CrankNicolsonCupy
 
 class TimeSimulation:
     """
-    Class for configuring time dependent simulations.
+    Manages time evolution of a quantum system using numerical solvers.
     """
 
-    def __init__(self, hamiltonian, method = "split-step"):
+    def __init__(self, hamiltonian, method="split-step"):
+        """
+        Initializes the time simulation with the selected solver.
 
+        Args:
+            hamiltonian: The Hamiltonian object defining the system.
+            method (str): The numerical solver to use ("split-step" or "crank-nicolson").
+        """
         self.H = hamiltonian
 
-        implemented_solvers = ('split-step', 'split-step-cupy', 'crank-nicolson', 'crank-nicolson-cupy')
-
-        if method == "split-step":
-
-            if self.H.potential_type == "grid":
-                self.method = SplitStep(self)
-            else:
-                raise NotImplementedError(
-                f"split-step can only be used with grid potential_type. Use crank-nicolson instead")
-
-        elif method == "split-step-cupy":
-
-            if self.H.potential_type == "grid":
-                self.method = SplitStepCupy(self)
-            else:
-                raise NotImplementedError(
-                f"split-step can only be used with grid potential_type. Use crank-nicolson instead")
-
-
-        elif method == "crank-nicolson":
-            self.method = CrankNicolson(self)
-            
-        elif method == "crank-nicolson-cupy":
-            self.method = CrankNicolsonCupy(self)
+        # Ensure Vgrid is properly structured
+        if hasattr(self.H, "Vgrid") and isinstance(self.H.Vgrid, np.ndarray):
+            self.Vgrid = self.H.Vgrid
         else:
-            raise NotImplementedError(
-                f"{method} solver has not been implemented. Use one of {implemented_solvers}")
+            self.Vgrid = self.H.Vgrid.reshape(self.H.N, self.H.N)
 
+        self.Vmin = np.amin(self.Vgrid)  # Ensure Vmin is correctly derived
 
+        self.method = self.select_solver(method)
 
-    def run(self, initial_wavefunction, total_time, dt, store_steps = 1):
+    def select_solver(self, method):
         """
+        Selects the appropriate solver based on the provided method.
+
+        Args:
+            method (str): Solver method to use.
+
+        Returns:
+            An instance of the selected solver.
         """
-        self.method.run(initial_wavefunction, total_time, dt, store_steps)
+        solvers = {
+            "split-step": SplitStep(self),
+            "crank-nicolson": CrankNicolson(self),
+        }
+
+        if method not in solvers:
+            raise NotImplementedError(f"Method '{method}' is not implemented.")
+
+        return solvers[method]
+
+    def run(self, wavefunction, total_time, dt, store_steps=1):
+        """
+        Runs the time evolution using the selected solver.
+
+        Args:
+            wavefunction: Initial wavefunction.
+            total_time: Total simulation time.
+            dt: Time step for evolution.
+            store_steps: Frequency of storing wavefunction snapshots.
+        """
+        return self.method.run(wavefunction, total_time, dt, store_steps)
+
+    def store_wavefunction(self, wavefunction):
+        """
+        Placeholder for storing wavefunction states during evolution.
+
+        Args:
+            wavefunction: The current wavefunction state.
+        """
+        # This function can be extended for data logging or visualization
+        pass
