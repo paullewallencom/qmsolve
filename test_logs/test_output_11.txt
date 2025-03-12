@@ -1,0 +1,51 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /Users/applecomputer648/Sites/Physics-203/venv3.9/bin/python3.9
+cachedir: .pytest_cache
+rootdir: /Users/applecomputer648/Sites/Physics-203/qmsolve-main
+collecting ... collected 13 items
+
+tests/test_eigenstates.py::test_initialization PASSED                    [  7%]
+tests/test_eigenstates.py::test_energies PASSED                          [ 15%]
+tests/test_eigenstates.py::test_array PASSED                             [ 23%]
+tests/test_eigenstates.py::test_number_of_states PASSED                  [ 30%]
+tests/test_eigenstates.py::test_type_attribute PASSED                    [ 38%]
+tests/test_eigenstates.py::test_invalid_initialization FAILED            [ 46%]
+tests/test_hamiltonian.py::test_initialization PASSED                    [ 53%]
+tests/test_hamiltonian.py::test_get_potential_matrix PASSED              [ 61%]
+tests/test_hamiltonian.py::test_solve_eigsh PASSED                       [ 69%]
+tests/test_hamiltonian.py::test_solve_lobpcg PASSED                      [ 76%]
+tests/test_hamiltonian.py::test_solve_invalid_method PASSED              [ 84%]
+tests/test_single_particle_3D.py::test_scene_exposure PASSED             [ 92%]
+tests/test_single_particle_3D.py::test_scene_disable_render PASSED       [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_invalid_initialization __________________________
+
+    def test_invalid_initialization():
+        """Test that initialization fails with invalid inputs."""
+        with pytest.raises(TypeError):
+            Eigenstates(None, None, None, None, None)  # Invalid inputs
+    
+        with pytest.raises(ValueError):
+>           Eigenstates(np.array([]), np.array([]), 5.0, 10, "grid")  # Empty eigenvalues and vectors
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+tests/test_eigenstates.py:50: Failed
+=============================== warnings summary ===============================
+../venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    import pkg_resources
+
+../venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('zope')`.
+  Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+    declare_namespace(pkg)
+
+qmsolve/time_dependent_solver/crank_nicolson.py:25
+  /Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/time_dependent_solver/crank_nicolson.py:25: DeprecationWarning: Please import `dia_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.dia` namespace is deprecated and will be removed in SciPy 2.0.0.
+    def jacobi(inv_diag: sparse.dia_matrix, lower_upper: sparse.dia.dia_matrix,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_eigenstates.py::test_invalid_initialization - Failed: DID N...
+=================== 1 failed, 12 passed, 3 warnings in 8.87s ===================
