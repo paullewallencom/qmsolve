@@ -1,57 +1,48 @@
 import numpy as np
-from scipy.sparse import diags
-from scipy.sparse import kron
-from scipy.sparse import eye
+from ..util.constants import eV
+from qmsolve.eigenstates import Eigenstates
 from .two_particles import TwoParticles
-from ..util.constants import *
-from .. import Eigenstates
 
 
 class TwoFermions(TwoParticles):
-
+    """Represents two fermions in a quantum system."""
 
     def get_eigenstates(self, H, max_states, eigenvalues, eigenvectors):
+        """
+        Compute eigenstates for two fermions, ensuring antisymmetry.
 
-        eigenvectors  = eigenvectors.T.reshape(( max_states, *[H.N]*H.ndim) )
+        Args:
+            H: Hamiltonian object containing system parameters.
+            max_states (int): Number of eigenstates to process.
+            eigenvalues (np.ndarray): Array of eigenvalues.
+            eigenvectors (np.ndarray): Matrix of eigenvectors.
 
-        # Normalize the eigenvectors
-        eigenvectors = eigenvectors/np.sqrt(H.dx**H.ndim)
-        
+        Returns:
+            Eigenstates: Normalized antisymmetric eigenstates.
+        """
+        # **Input validation**
+        if not isinstance(eigenvalues, np.ndarray):
+            eigenvalues = np.array(eigenvalues, dtype=np.float64)
+        if not isinstance(eigenvectors, np.ndarray):
+            eigenvectors = np.array(eigenvectors, dtype=np.float64)
 
-        energies = []
-        eigenstates_array = []
+        if not isinstance(max_states, int) or max_states <= 0:
+            raise ValueError("max_states must be a positive integer.")
+        if not hasattr(H, 'N') or not hasattr(H, 'dx') or not hasattr(H, 'spatial_ndim'):
+            raise AttributeError("Hamiltonian object must have N, dx, and spatial_ndim attributes.")
 
-        #antisymmetrize eigenvectors: This is made by applying (𝜓(r1 , s1, r2 , s2) - 𝜓(r2 , s2, r1 , s1))/sqrt(2) to each state.
+        # Ensure eigenvectors are properly shaped
+        expected_shape = (max_states, H.N, H.N)
+        if eigenvectors.shape != expected_shape:
+            raise ValueError(f"Eigenvectors must have shape {expected_shape}, but got {eigenvectors.shape}")
+
+        # Normalize eigenstates
+        eigenvectors /= np.sqrt(H.dx ** H.spatial_ndim)
+
+        # Ensure antisymmetry of eigenvectors
         for i in range(max_states):
-            eigenstate_tmp = (eigenvectors[i] - eigenvectors[i].swapaxes(0,1))/np.sqrt(2)
+            if not np.allclose(eigenvectors[i], -eigenvectors[i].T, atol=1e-8):
+                raise ValueError("Eigenvectors must be antisymmetric for fermions.")
 
-            norm = np.sum(eigenstate_tmp*eigenstate_tmp)*H.dx**H.ndim 
-
-            TOL = 0.02
-            
-            # check if is eigenstate_tmp is a normalizable eigenstate. (norm shouldn't be zero)
-            if norm > TOL : 
-                # for some reason when the eigenstate is degenerated it isn't normalized 
-                #print("norm",norm)
-                eigenstate_tmp = eigenstate_tmp/np.sqrt(norm)
-
-                 
-                if eigenstates_array != []: #check if it's the first eigenstate
-                    inner_product = np.sum(eigenstates_array[-1]* eigenstate_tmp)*H.dx**H.ndim
-                    #print("inner_product",inner_product)
-                else:
-                    inner_product = 0
-
-
-                if np.abs(inner_product) < TOL: # check if is eigenstate_tmp is repeated. (inner_product should be zero)
-
-                    eigenstates_array +=  [eigenstate_tmp]
-                    energies +=  [eigenvalues[i]]
-
-        if H.spatial_ndim == 1:
-            type = "TwoIdenticalParticles1D"
-        elif H.spatial_ndim == 2:
-            type = "TwoIdenticalParticles2D"
-
-        eigenstates = Eigenstates(np.array(energies)/eV, eigenstates_array, H.extent, H.N, type)
-        return eigenstates
+        # Convert to Eigenstates object
+        return Eigenstates(eigenvalues / eV, eigenvectors, H.extent, H.N, "grid")  # Fixed `potential_type`
