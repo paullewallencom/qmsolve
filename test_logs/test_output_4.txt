@@ -1,0 +1,100 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /Users/applecomputer648/Sites/Physics-203/venv3.9/bin/python3.9
+cachedir: .pytest_cache
+rootdir: /Users/applecomputer648/Sites/Physics-203/qmsolve-main
+collecting ... collected 7 items
+
+tests/test_hamiltonian.py::test_initialization PASSED                    [ 14%]
+tests/test_hamiltonian.py::test_get_potential_matrix FAILED              [ 28%]
+tests/test_hamiltonian.py::test_solve_eigsh FAILED                       [ 42%]
+tests/test_hamiltonian.py::test_solve_lobpcg FAILED                      [ 57%]
+tests/test_hamiltonian.py::test_solve_invalid_method FAILED              [ 71%]
+tests/test_single_particle_3D.py::test_scene_exposure PASSED             [ 85%]
+tests/test_single_particle_3D.py::test_scene_disable_render FAILED       [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_get_potential_matrix ___________________________
+
+hamiltonian = <qmsolve.hamiltonian.Hamiltonian object at 0x1462f2ee0>
+
+    def test_get_potential_matrix(hamiltonian):
+        """Test if potential matrix is correctly initialized."""
+        potential_matrix = hamiltonian.get_potential_matrix()
+>       assert potential_matrix.shape == (hamiltonian.N ** hamiltonian.ndim,)
+E       assert (1000, 1000) == (1000,)
+E         
+E         Left contains one more item: 1000
+E         
+E         Full diff:
+E           (
+E               1000,
+E         +     1000,
+E           )
+
+tests/test_hamiltonian.py:49: AssertionError
+_______________________________ test_solve_eigsh _______________________________
+
+hamiltonian = <qmsolve.hamiltonian.Hamiltonian object at 0x1463d4d90>
+
+    def test_solve_eigsh(hamiltonian):
+        """Test eigsh solver on Hamiltonian."""
+>       eigenvalues, eigenvectors = hamiltonian.solve(method="eigsh", maxiter=5)
+E       TypeError: solve() got an unexpected keyword argument 'maxiter'
+
+tests/test_hamiltonian.py:53: TypeError
+______________________________ test_solve_lobpcg _______________________________
+
+hamiltonian = <qmsolve.hamiltonian.Hamiltonian object at 0x1462f2250>
+
+    def test_solve_lobpcg(hamiltonian):
+        """Test lobpcg solver on Hamiltonian."""
+>       eigenvalues, eigenvectors = hamiltonian.solve(method="lobpcg", maxiter=5)
+E       TypeError: solve() got an unexpected keyword argument 'maxiter'
+
+tests/test_hamiltonian.py:59: TypeError
+__________________________ test_solve_invalid_method ___________________________
+
+hamiltonian = <qmsolve.hamiltonian.Hamiltonian object at 0x1463cfb50>
+
+    def test_solve_invalid_method(hamiltonian):
+        """Ensure invalid solver method raises an error."""
+        with pytest.raises(ValueError):
+>           hamiltonian.solve(method="invalid")
+E           TypeError: solve() missing 1 required positional argument: 'max_states'
+
+tests/test_hamiltonian.py:66: TypeError
+__________________________ test_scene_disable_render ___________________________
+
+visualization = <test_single_particle_3D.MockVisualization object at 0x1463d3790>
+
+    def test_scene_disable_render(visualization):
+        """Test that scene.disable_render can be toggled."""
+        visualization.plot_eigenstate(0)
+>       assert hasattr(visualization.scene, "disable_render")  # Ensure attribute exists
+E       AssertionError: assert False
+E        +  where False = hasattr(True, 'disable_render')
+E        +    where True = <test_single_particle_3D.MockVisualization object at 0x1463d3790>.scene
+
+tests/test_single_particle_3D.py:26: AssertionError
+=============================== warnings summary ===============================
+../venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    import pkg_resources
+
+../venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('zope')`.
+  Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+    declare_namespace(pkg)
+
+qmsolve/time_dependent_solver/crank_nicolson.py:25
+  /Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/time_dependent_solver/crank_nicolson.py:25: DeprecationWarning: Please import `dia_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.dia` namespace is deprecated and will be removed in SciPy 2.0.0.
+    def jacobi(inv_diag: sparse.dia_matrix, lower_upper: sparse.dia.dia_matrix,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_hamiltonian.py::test_get_potential_matrix - assert (1000, 1...
+FAILED tests/test_hamiltonian.py::test_solve_eigsh - TypeError: solve() got a...
+FAILED tests/test_hamiltonian.py::test_solve_lobpcg - TypeError: solve() got ...
+FAILED tests/test_hamiltonian.py::test_solve_invalid_method - TypeError: solv...
+FAILED tests/test_single_particle_3D.py::test_scene_disable_render - Assertio...
+=================== 5 failed, 2 passed, 3 warnings in 7.91s ====================

@@ -1,0 +1,272 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /Users/applecomputer648/Sites/Physics-203/venv3.9/bin/python3.9
+cachedir: .pytest_cache
+rootdir: /Users/applecomputer648/Sites/Physics-203/qmsolve-main
+collecting ... collected 7 items
+
+tests/test_hamiltonian.py::test_initialization ERROR                     [ 14%]
+tests/test_hamiltonian.py::test_get_potential_matrix ERROR               [ 28%]
+tests/test_hamiltonian.py::test_solve_eigsh ERROR                        [ 42%]
+tests/test_hamiltonian.py::test_solve_lobpcg ERROR                       [ 57%]
+tests/test_hamiltonian.py::test_solve_invalid_method ERROR               [ 71%]
+tests/test_single_particle_3D.py::test_scene_exposure PASSED             [ 85%]
+tests/test_single_particle_3D.py::test_scene_disable_render PASSED       [100%]
+
+==================================== ERRORS ====================================
+____________________ ERROR at setup of test_initialization _____________________
+
+    @pytest.fixture
+    def hamiltonian():
+        """Fixture to create a Hamiltonian instance with a mock potential."""
+        N = 10
+        extent = 5.0
+        spatial_ndim = 3
+        potential_type = "grid"
+    
+        def mock_potential(particle_system):
+            """Mock potential function returning a zero potential grid."""
+            return np.zeros((N, N, N))
+    
+>       return Hamiltonian(
+            particles=MockParticleSystem(),
+            potential=mock_potential,
+            N=N,
+            extent=extent,
+            spatial_ndim=spatial_ndim,
+            potential_type=potential_type
+        )
+
+tests/test_hamiltonian.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+qmsolve/hamiltonian.py:34: in __init__
+    self.V = self.get_potential_matrix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qmsolve.hamiltonian.Hamiltonian object at 0x147cb98b0>
+
+    def get_potential_matrix(self):
+    
+        if self.potential_type == "grid":
+    
+            if self.potential == None:
+                self.E_min = 0.
+                V = 0.
+                return V
+            else:
+                V = self.potential(self.particle_system)
+                self.Vgrid = V
+                self.E_min = np.amin(V)
+>               V = V.reshape(self.N ** self.ndim)
+E               ValueError: cannot reshape array of size 1000 into shape (1,)
+
+qmsolve/hamiltonian.py:48: ValueError
+_________________ ERROR at setup of test_get_potential_matrix __________________
+
+    @pytest.fixture
+    def hamiltonian():
+        """Fixture to create a Hamiltonian instance with a mock potential."""
+        N = 10
+        extent = 5.0
+        spatial_ndim = 3
+        potential_type = "grid"
+    
+        def mock_potential(particle_system):
+            """Mock potential function returning a zero potential grid."""
+            return np.zeros((N, N, N))
+    
+>       return Hamiltonian(
+            particles=MockParticleSystem(),
+            potential=mock_potential,
+            N=N,
+            extent=extent,
+            spatial_ndim=spatial_ndim,
+            potential_type=potential_type
+        )
+
+tests/test_hamiltonian.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+qmsolve/hamiltonian.py:34: in __init__
+    self.V = self.get_potential_matrix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qmsolve.hamiltonian.Hamiltonian object at 0x147cd7f40>
+
+    def get_potential_matrix(self):
+    
+        if self.potential_type == "grid":
+    
+            if self.potential == None:
+                self.E_min = 0.
+                V = 0.
+                return V
+            else:
+                V = self.potential(self.particle_system)
+                self.Vgrid = V
+                self.E_min = np.amin(V)
+>               V = V.reshape(self.N ** self.ndim)
+E               ValueError: cannot reshape array of size 1000 into shape (1,)
+
+qmsolve/hamiltonian.py:48: ValueError
+______________________ ERROR at setup of test_solve_eigsh ______________________
+
+    @pytest.fixture
+    def hamiltonian():
+        """Fixture to create a Hamiltonian instance with a mock potential."""
+        N = 10
+        extent = 5.0
+        spatial_ndim = 3
+        potential_type = "grid"
+    
+        def mock_potential(particle_system):
+            """Mock potential function returning a zero potential grid."""
+            return np.zeros((N, N, N))
+    
+>       return Hamiltonian(
+            particles=MockParticleSystem(),
+            potential=mock_potential,
+            N=N,
+            extent=extent,
+            spatial_ndim=spatial_ndim,
+            potential_type=potential_type
+        )
+
+tests/test_hamiltonian.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+qmsolve/hamiltonian.py:34: in __init__
+    self.V = self.get_potential_matrix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qmsolve.hamiltonian.Hamiltonian object at 0x147dd9820>
+
+    def get_potential_matrix(self):
+    
+        if self.potential_type == "grid":
+    
+            if self.potential == None:
+                self.E_min = 0.
+                V = 0.
+                return V
+            else:
+                V = self.potential(self.particle_system)
+                self.Vgrid = V
+                self.E_min = np.amin(V)
+>               V = V.reshape(self.N ** self.ndim)
+E               ValueError: cannot reshape array of size 1000 into shape (1,)
+
+qmsolve/hamiltonian.py:48: ValueError
+_____________________ ERROR at setup of test_solve_lobpcg ______________________
+
+    @pytest.fixture
+    def hamiltonian():
+        """Fixture to create a Hamiltonian instance with a mock potential."""
+        N = 10
+        extent = 5.0
+        spatial_ndim = 3
+        potential_type = "grid"
+    
+        def mock_potential(particle_system):
+            """Mock potential function returning a zero potential grid."""
+            return np.zeros((N, N, N))
+    
+>       return Hamiltonian(
+            particles=MockParticleSystem(),
+            potential=mock_potential,
+            N=N,
+            extent=extent,
+            spatial_ndim=spatial_ndim,
+            potential_type=potential_type
+        )
+
+tests/test_hamiltonian.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+qmsolve/hamiltonian.py:34: in __init__
+    self.V = self.get_potential_matrix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qmsolve.hamiltonian.Hamiltonian object at 0x147da6100>
+
+    def get_potential_matrix(self):
+    
+        if self.potential_type == "grid":
+    
+            if self.potential == None:
+                self.E_min = 0.
+                V = 0.
+                return V
+            else:
+                V = self.potential(self.particle_system)
+                self.Vgrid = V
+                self.E_min = np.amin(V)
+>               V = V.reshape(self.N ** self.ndim)
+E               ValueError: cannot reshape array of size 1000 into shape (1,)
+
+qmsolve/hamiltonian.py:48: ValueError
+_________________ ERROR at setup of test_solve_invalid_method __________________
+
+    @pytest.fixture
+    def hamiltonian():
+        """Fixture to create a Hamiltonian instance with a mock potential."""
+        N = 10
+        extent = 5.0
+        spatial_ndim = 3
+        potential_type = "grid"
+    
+        def mock_potential(particle_system):
+            """Mock potential function returning a zero potential grid."""
+            return np.zeros((N, N, N))
+    
+>       return Hamiltonian(
+            particles=MockParticleSystem(),
+            potential=mock_potential,
+            N=N,
+            extent=extent,
+            spatial_ndim=spatial_ndim,
+            potential_type=potential_type
+        )
+
+tests/test_hamiltonian.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+qmsolve/hamiltonian.py:34: in __init__
+    self.V = self.get_potential_matrix()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <qmsolve.hamiltonian.Hamiltonian object at 0x147cd7be0>
+
+    def get_potential_matrix(self):
+    
+        if self.potential_type == "grid":
+    
+            if self.potential == None:
+                self.E_min = 0.
+                V = 0.
+                return V
+            else:
+                V = self.potential(self.particle_system)
+                self.Vgrid = V
+                self.E_min = np.amin(V)
+>               V = V.reshape(self.N ** self.ndim)
+E               ValueError: cannot reshape array of size 1000 into shape (1,)
+
+qmsolve/hamiltonian.py:48: ValueError
+=============================== warnings summary ===============================
+../venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    import pkg_resources
+
+../venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('zope')`.
+  Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+    declare_namespace(pkg)
+
+qmsolve/time_dependent_solver/crank_nicolson.py:25
+  /Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/time_dependent_solver/crank_nicolson.py:25: DeprecationWarning: Please import `dia_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.dia` namespace is deprecated and will be removed in SciPy 2.0.0.
+    def jacobi(inv_diag: sparse.dia_matrix, lower_upper: sparse.dia.dia_matrix,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/test_hamiltonian.py::test_initialization - ValueError: cannot res...
+ERROR tests/test_hamiltonian.py::test_get_potential_matrix - ValueError: cann...
+ERROR tests/test_hamiltonian.py::test_solve_eigsh - ValueError: cannot reshap...
+ERROR tests/test_hamiltonian.py::test_solve_lobpcg - ValueError: cannot resha...
+ERROR tests/test_hamiltonian.py::test_solve_invalid_method - ValueError: cann...
+=================== 2 passed, 3 warnings, 5 errors in 7.92s ====================
