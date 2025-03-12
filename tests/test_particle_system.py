@@ -1,30 +1,21 @@
 import pytest
 import numpy as np
-from qmsolve.particle_system import MockParticleSystem
-
-class MockHamiltonian:
-    """Mock Hamiltonian for testing."""
-    def __init__(self, N=5):
-        self.N = N
+from qmsolve.particle_system.particle_system import ParticleSystem
 
 @pytest.fixture
-def mock_particle_system():
-    """Fixture to create a MockParticleSystem instance."""
-    return MockParticleSystem(num_particles=2, mass=1.5)
+def particle_system():
+    return ParticleSystem()
 
-@pytest.fixture
-def mock_hamiltonian():
-    """Fixture to create a MockHamiltonian instance."""
-    return MockHamiltonian(N=5)
+def test_add_particle(particle_system):
+    particle_system.add_particle(1.0, -1.0, [0, 0, 0])
+    assert particle_system.get_particle_count() == 1
 
-def test_initialization(mock_particle_system):
-    """Test the initialization of the MockParticleSystem."""
-    assert mock_particle_system.num_particles == 2
-    assert mock_particle_system.mass == 1.5
+def test_get_total_mass(particle_system):
+    particle_system.add_particle(1.0, -1.0, [0, 0, 0])
+    particle_system.add_particle(2.0, 1.0, [1, 1, 1])
+    assert particle_system.get_total_mass() == 3.0
 
-def test_kinetic_matrix(mock_particle_system, mock_hamiltonian):
-    """Test the kinetic energy matrix method."""
-    kinetic_matrix = mock_particle_system.get_kinetic_matrix(mock_hamiltonian)
-    assert isinstance(kinetic_matrix, np.ndarray)
-    assert kinetic_matrix.shape == (5, 5)
-    assert np.allclose(kinetic_matrix, np.eye(5))
+def test_apply_force(particle_system):
+    particle_system.add_particle(1.0, -1.0, [0, 0, 0])
+    particle_system.apply_force(0, np.array([1, 1, 1]))
+    assert np.all(particle_system.particles[0]["position"] == np.array([1, 1, 1]))

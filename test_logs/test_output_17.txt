@@ -1,0 +1,95 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /Users/applecomputer648/Sites/Physics-203/venv3.9/bin/python3.9
+cachedir: .pytest_cache
+rootdir: /Users/applecomputer648/Sites/Physics-203/qmsolve-main
+collecting ... collected 24 items / 7 errors
+
+==================================== ERRORS ====================================
+________________ ERROR collecting tests/test_particle_system.py ________________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_particle_system.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_particle_system.py:3: in <module>
+    from qmsolve.particle_system import ParticleSystem, MockParticleSystem
+E   ImportError: cannot import name 'ParticleSystem' from 'qmsolve.particle_system' (/Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/particle_system/__init__.py)
+_____________ ERROR collecting tests/test_particle_system_init.py ______________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_particle_system_init.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_particle_system_init.py:2: in <module>
+    import particle_system
+E   ModuleNotFoundError: No module named 'particle_system'
+__________ ERROR collecting tests/test_time_dependent_solver_init.py ___________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_time_dependent_solver_init.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_time_dependent_solver_init.py:2: in <module>
+    from qmsolve.time_dependent_solver import SomeSolverClass  # Replace with actual class
+E   ImportError: cannot import name 'SomeSolverClass' from 'qmsolve.time_dependent_solver' (/Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/time_dependent_solver/__init__.py)
+_____________________ ERROR collecting tests/test_util.py ______________________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_util.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_util.py:2: in <module>
+    from qmsolve.util import some_utility_function  # Replace with actual function
+E   ImportError: cannot import name 'some_utility_function' from 'qmsolve.util' (/Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/util/__init__.py)
+___________________ ERROR collecting tests/test_util_init.py ___________________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_util_init.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_util_init.py:2: in <module>
+    import util
+E   ModuleNotFoundError: No module named 'util'
+_________________ ERROR collecting tests/test_visualization.py _________________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_visualization.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_visualization.py:2: in <module>
+    from qmsolve.visualization import VisualizationClass  # Replace with actual class
+E   ImportError: cannot import name 'VisualizationClass' from 'qmsolve.visualization' (/Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/visualization/__init__.py)
+______________ ERROR collecting tests/test_visualization_init.py _______________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_visualization_init.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_visualization_init.py:2: in <module>
+    import visualization
+E   ModuleNotFoundError: No module named 'visualization'
+=============================== warnings summary ===============================
+../venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/mayavi/preferences/preference_manager.py:24: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+    import pkg_resources
+
+../venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147
+  /Users/applecomputer648/Sites/Physics-203/venv3.9/lib/python3.9/site-packages/pkg_resources/__init__.py:3147: DeprecationWarning: Deprecated call to `pkg_resources.declare_namespace('zope')`.
+  Implementing implicit namespace packages (as specified in PEP 420) is preferred to `pkg_resources.declare_namespace`. See https://setuptools.pypa.io/en/latest/references/keywords.html#keyword-namespace-packages
+    declare_namespace(pkg)
+
+qmsolve/time_dependent_solver/crank_nicolson.py:25
+  /Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/time_dependent_solver/crank_nicolson.py:25: DeprecationWarning: Please import `dia_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.dia` namespace is deprecated and will be removed in SciPy 2.0.0.
+    def jacobi(inv_diag: sparse.dia_matrix, lower_upper: sparse.dia.dia_matrix,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/test_particle_system.py
+ERROR tests/test_particle_system_init.py
+ERROR tests/test_time_dependent_solver_init.py
+ERROR tests/test_util.py
+ERROR tests/test_util_init.py
+ERROR tests/test_visualization.py
+ERROR tests/test_visualization_init.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 7 errors during collection !!!!!!!!!!!!!!!!!!!!
+======================== 3 warnings, 7 errors in 8.47s =========================

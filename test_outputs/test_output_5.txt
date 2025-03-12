@@ -1,0 +1,25 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0
+rootdir: /Users/applecomputer648/Sites/Physics-203/qmsolve-main
+collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+________________ ERROR collecting tests/test_particle_system.py ________________
+ImportError while importing test module '/Users/applecomputer648/Sites/Physics-203/qmsolve-main/tests/test_particle_system.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/local/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/importlib/__init__.py:127: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_particle_system.py:3: in <module>
+    from qmsolve.particle_system import ParticleSystem
+qmsolve/__init__.py:1: in <module>
+    from . import particle_system  # This allows `qmsolve.particle_system.SingleParticle` to work
+qmsolve/particle_system/__init__.py:2: in <module>
+    from .single_particle import SingleParticle
+qmsolve/particle_system/single_particle.py:7: in <module>
+    from .. import Eigenstates
+E   ImportError: cannot import name 'Eigenstates' from partially initialized module 'qmsolve' (most likely due to a circular import) (/Users/applecomputer648/Sites/Physics-203/qmsolve-main/qmsolve/__init__.py)
+=========================== short test summary info ============================
+ERROR tests/test_particle_system.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+=============================== 1 error in 0.92s ===============================

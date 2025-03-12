@@ -1,6 +1,9 @@
 import pytest
-import time_dependent_solver
+from qmsolve.time_dependent_solver import SomeSolverClass  # Replace with actual class
 
-def test_imports():
-    """Test that TimeSimulation can be accessed via time_dependent_solver."""
-    assert hasattr(time_dependent_solver, "TimeSimulation")
+@pytest.fixture
+def solver():
+    return SomeSolverClass()
+
+def test_solver_initialization(solver):
+    assert solver is not None

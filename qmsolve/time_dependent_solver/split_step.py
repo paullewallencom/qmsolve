@@ -2,7 +2,7 @@ import numpy as np
 from .method import Method
 import time
 from ..util.constants import hbar, Å, femtoseconds
-from ..particle_system import SingleParticle, TwoParticles
+from qmsolve.particle_system import SingleParticle, TwoParticles
 import progressbar
 
 """

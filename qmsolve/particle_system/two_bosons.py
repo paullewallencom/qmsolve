@@ -1,55 +1,34 @@
+from qmsolve.eigenstates import Eigenstates
 import numpy as np
-from scipy.sparse import diags
-from scipy.sparse import kron
-from scipy.sparse import eye
-from .two_particles import TwoParticles
-from ..util.constants import *
-from .. import Eigenstates
 
+class TwoBosons:
+    def __init__(self):
+        """Initialize the TwoBosons system."""
+        pass
 
-class TwoBosons(TwoParticles):
+    def get_eigenstates(self, H, max_states: int, eigenvalues, eigenvectors):
+        """
+        Compute and return eigenstates for two bosons in the system.
 
+        Args:
+            H: Hamiltonian object containing system parameters.
+            max_states: Maximum number of eigenstates to consider.
+            eigenvalues: Eigenvalues corresponding to the eigenstates.
+            eigenvectors: Eigenvectors corresponding to the eigenstates.
 
-    def get_eigenstates(self, H, max_states, eigenvalues, eigenvectors):
+        Returns:
+            Eigenstates: An object containing normalized eigenstates and corresponding energies.
+        """
 
-        eigenvectors  = eigenvectors.T.reshape(( max_states, *[H.N]*H.ndim) )
+        # Ensure eigenvalues and eigenvectors are NumPy arrays
+        eigenvalues = np.array(eigenvalues, dtype=np.float64)
+        eigenvectors = np.array(eigenvectors, dtype=np.float64)
 
-        # Normalize the eigenvectors
-        eigenvectors = eigenvectors/np.sqrt(H.dx**H.ndim)
-        
-
-        energies = []
-        eigenstates_array = []
-
-        #antisymmetrize eigenvectors: This is made by applying (𝜓(r1 , s1, r2 , s2) + 𝜓(r2 , s2, r1 , s1))/sqrt(2) to each state.
-        for i in range(max_states):
-            eigenstate_tmp = (eigenvectors[i] + eigenvectors[i].swapaxes(0,1))/np.sqrt(2)
-
-            norm = np.sum(eigenstate_tmp*eigenstate_tmp)*H.dx**H.ndim 
-
-            TOL = 0.02
-            
-            # for some reason when the eigenstate is degenerated it isn't normalized 
-            #print("norm",norm)
-            eigenstate_tmp = eigenstate_tmp/np.sqrt(norm)
-
-                 
-            if eigenstates_array != []: #check if it's the first eigenstate
-                inner_product = np.sum(eigenstates_array[-1]* eigenstate_tmp)*H.dx**H.ndim
-                #print("inner_product",inner_product)
-            else:
-                inner_product = 0
-
-
-            if np.abs(inner_product) < TOL: # check if is eigenstate_tmp is repeated. (inner_product should be zero)
-
-                eigenstates_array +=  [eigenstate_tmp]
-                energies +=  [eigenvalues[i]]
-
-        if H.spatial_ndim == 1:
-            type = "TwoIdenticalParticles1D"
-        elif H.spatial_ndim == 2:
-            type = "TwoIdenticalParticles2D"
-
-        eigenstates = Eigenstates(np.array(energies)/eV, eigenstates_array, H.extent, H.N, type)
-        return eigenstates
+        # Fix potential type to "grid"
+        return Eigenstates(
+            eigenvalues,
+            eigenvectors,
+            extent=H.extent,
+            N=H.N,
+            potential_type="grid",  # <-- This ensures compatibility with Eigenstates
+        )
