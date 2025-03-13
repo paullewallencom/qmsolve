@@ -2,8 +2,22 @@ import numpy as np
 from .method import Method
 import time
 from ..util.constants import hbar, Å, femtoseconds
-from qmsolve.particle_system import SingleParticle, TwoParticles
 import progressbar
+
+
+def get_single_particle():
+    from qmsolve.particle_system import get_single_particle
+    return get_single_particle()
+
+
+def get_two_particles():
+    from qmsolve.particle_system import get_two_particles
+    return get_two_particles()
+
+
+SingleParticle = get_single_particle()
+TwoParticles = get_two_particles()
+
 
 """
 Split-operator method for the Schrödinger equation.
@@ -16,6 +30,7 @@ https://www.algorithm-archive.org/contents/
 split-operator_method/split-operator_method.html
 https://en.wikipedia.org/wiki/Split-step_method
 """
+
 
 class SplitStep(Method):
     def __init__(self, simulation):
