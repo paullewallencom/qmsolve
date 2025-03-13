@@ -1,14 +1,18 @@
 from .hamiltonian import Hamiltonian
 from .eigenstates import Eigenstates
 from .time_dependent_solver import crank_nicolson
-from qmsolve.util.colour_functions import complex_to_rgb, complex_to_rgba
-from .visualization.single_particle_1D import VisualizationSingleParticle1D  # Corrected Import
+from .visualization.two_identical_particles_1D import (
+    VisualizationIdenticalParticles1D,
+    TimeVisualizationTwoIdenticalParticles1D,
+)
+from .visualization.single_particle_1D import VisualizationSingleParticle1D
+# Add other visualization classes here if needed
 
 __all__ = [
+    "Hamiltonian",
     "Eigenstates",
-    "particle_system",
-    "time_dependent_solver",
-    "util",
-    "visualization",
-    "VisualizationSingleParticle1D"
+    "crank_nicolson",
+    "VisualizationSingleParticle1D",
+    "VisualizationIdenticalParticles1D",
+    "TimeVisualizationTwoIdenticalParticles1D",
 ]
