@@ -1,3 +1,4 @@
-from .visualization import Visualization, init_visualization
+from .visualization import init_visualization
+from .single_particle_1D import VisualizationSingleParticle1D
 
-__all__ = ["Visualization", "init_visualization"]
+__all__ = ["VisualizationSingleParticle1D", "init_visualization"]
