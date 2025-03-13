@@ -2,7 +2,7 @@
 from .hamiltonian import Hamiltonian
 from .eigenstates import Eigenstates
 from .time_dependent_solver import crank_nicolson
-from .util import colour_functions, constants, file_handling
+from qmsolve.util.colour_functions import complex_to_rgb, complex_to_rgba
 from .visualization import visualization
 
 # Delay importing particle_system and eigenstates to avoid circular import
