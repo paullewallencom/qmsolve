@@ -1,4 +1,6 @@
 import pytest
+pytest.skip("Placeholder test—not yet implemented.", allow_module_level=True)
+
 from qmsolve.time_dependent_solver import SomeSolverClass  # Replace with actual class
 
 @pytest.fixture

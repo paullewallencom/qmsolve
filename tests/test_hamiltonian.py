@@ -27,7 +27,7 @@ def hamiltonian():
 
     def mock_potential(particle_system):
         """Mock potential function returning a zero potential grid."""
-        return np.zeros((N ** spatial_ndim,))
+        return np.zeros((N,)*spatial_ndim).reshape(-1)
 
     return Hamiltonian(
         particles=MockParticleSystem(),

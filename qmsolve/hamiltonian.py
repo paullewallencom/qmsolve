@@ -52,7 +52,9 @@ class Hamiltonian:
         V = self.potential(self.particle_system)
 
         # Ensure potential is reshaped correctly before conversion
-        expected_size = self.N
+        expected_size = self.N ** self.spatial_ndim  # explicitly correct
+        if V.size != expected_size:
+            raise ValueError(f"Potential shape {V.shape} does not match expected size {expected_size}.")
         if V.size != expected_size:
             raise ValueError(f"Potential shape {V.shape} does not match expected size {expected_size}.")
 
