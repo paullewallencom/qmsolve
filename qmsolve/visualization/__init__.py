@@ -6,10 +6,12 @@ from .two_identical_particles_1D import (
     VisualizationIdenticalParticles1D,
     TimeVisualizationTwoIdenticalParticles1D,
 )
+from .complex_slider_widget import ComplexSliderWidget
 
 __all__ = [
     "VisualizationSingleParticle1D",
     "VisualizationSingleParticle2D",
     "VisualizationIdenticalParticles1D",
     "TimeVisualizationTwoIdenticalParticles1D",
+    "ComplexSliderWidget",
 ]

@@ -12,7 +12,7 @@ class VisualizationIdenticalParticles1D(Visualization):
     def plot_eigenstate(self, k, xlim=None):
         eigenstates_array = self.eigenstates.array
         plt.style.use("dark_background")
-        
+
         fig, ax = plt.subplots(figsize=(7, 7))
         L = self.eigenstates.extent / (2 * Å)
         ax.imshow(complex_to_rgb(eigenstates_array[k]), extent=[-L, L, -L, L], origin='lower')
