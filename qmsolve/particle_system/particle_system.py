@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class ParticleSystem:
     """Represents a system of particles with properties like mass, charge, and position."""
 
